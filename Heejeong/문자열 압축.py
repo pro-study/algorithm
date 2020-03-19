@@ -3,7 +3,7 @@ def solution(s):
     result = len(s)
 
     # cnt : 압축 단위
-    for cnt in range(1, len(s) + 1):
+    for cnt in range(1, len(s)//2 + 1):
         stack = []
 
         # 압축 단위수 만큼 문자열 자르기
