@@ -1,6 +1,7 @@
 package P올바른_괄호;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /*
     제한사항
@@ -12,21 +13,17 @@ public class Solution {
     boolean solution(String s) {
         boolean answer = true;
 
-        Stack<Character> stack = new Stack<>();
+        Deque<Character> stack = new ArrayDeque<>();
 
         for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '(') {
-                stack.push('(');
-            } else if (s.charAt(i) == ')') {
-                if (!stack.empty()) {
-                    stack.pop();
-                } else { // 만약 스택에 값이 없다면 이미 틀린 상황이므로 false 를 반환
-                    return false;
-                }
+            if (s.charAt(i) == '(') stack.push('(');
+            else if (s.charAt(i) == ')') {
+                if (!stack.isEmpty()) stack.pop();
+                else return false; // 만약 스택에 값이 없다면 이미 틀린 상황이므로 false 를 반환
             }
         }
 
-        if (!stack.empty()) {
+        if (!stack.isEmpty()) {
             answer = false;
         }
 
