@@ -1,25 +1,32 @@
 import queue
+from collections import namedtuple
 
-def solution(priorities, location):
-    answer = 0
+"""class PrinterItem:
+    def __init__(self, location, priority):
+        self.location = location
+        self.priority = priority"""
+
+def solution(priorities, target):
+    print_cnt = 0
     printer = queue.Queue()
+    PrinterItem = namedtuple('PrinterItem','location priority')
     
-    for i,e in enumerate(priorities):
-        printer.put([i,e])
+    for location, priority in enumerate(priorities):
+        printer.put(PrinterItem(location, priority))
         
-    priorities.sort()
-        
+    priorities.sort() #최대값 비교를 위해서 오름차순 정렬합니다.
+
     while printer:
-        temp = printer.get()
+        cur_item = printer.get()
         
-        if temp[1] < priorities[len(priorities)-1]:
-            printer.put(temp)
+        if cur_item.priority < priorities[len(priorities)-1]:
+            printer.put(cur_item)
             continue
             
         priorities.pop()
-        answer += 1
+        print_cnt += 1
         
-        if temp[0] == location:
+        if cur_item.location == target:
             break
     
-    return answer
+    return print_cnt
