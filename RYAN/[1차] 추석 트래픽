@@ -20,12 +20,13 @@ public class Solution {
 			.collect(Collectors.toList());
 
 		return timestamps.stream().mapToInt(timestamp ->
-			(int) requests.stream().filter(request -> request.isElapsed(timestamp, 1000L - 1L)).count()
+			(int) requests.stream().filter(request -> request.isElapsedBetween(timestamp, timestamp + (1000L - 1L))).count()
 		).max().orElse(0);
 	}
 }
 
 class Request {
+	
 	private Long[] timestamps;
 
 	private static final int START_TIMESTAMP_IDX = 0;
@@ -39,16 +40,8 @@ class Request {
 		return Arrays.copyOf(timestamps, timestamps.length);
 	}
 
-	Long getStartTimestamp() {
-		return timestamps[START_TIMESTAMP_IDX];
-	}
-
-	Long getEndTimestamp() {
-		return timestamps[END_TIMESTAMP_IDX];
-	}
-
-	boolean isElapsed(Long timestamp, Long period) {
-		return timestamp + period >= this.getStartTimestamp() && timestamp <= this.getEndTimestamp();
+	boolean isElapsedBetween(Long fromTimestamp, Long toTimestamp) {
+		return toTimestamp >= timestamps[START_TIMESTAMP_IDX] && fromTimestamp <= timestamps[END_TIMESTAMP_IDX];
 	}
 
 	private Long[] generateTimestamps(String date, String time, String processTime) {
@@ -62,6 +55,7 @@ class Request {
 		} catch (ParseException e) { }
 
 		long timeInterval = (long)(Float.parseFloat(extractOnlyNumberAndDot(processTime)) * 1000);
+		
 		timestamps[START_TIMESTAMP_IDX] = calendar.getTimeInMillis() - timeInterval + 1L;
 		timestamps[END_TIMESTAMP_IDX] = calendar.getTimeInMillis();
 
