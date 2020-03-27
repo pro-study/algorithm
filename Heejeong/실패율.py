@@ -1,3 +1,5 @@
+from collections import Counter
+
 class Stage:
     def __init__(self, num, failed, total):
         self.num = num
@@ -21,17 +23,18 @@ def solution(N, stages):
     answer = []
 
     # stage 별 Stage 객체 생성
-    stage = {n: Stage(n + 1, 0, 0) for n in range(N)}
+    stage = {n: Stage(n, 0, 0) for n in range(1, N+1)}
+    stage_count = dict(Counter(stages))
 
-    # stages의 배열을 순회하면서 stage의 전체 횟수와 실패 횟수 카운트
-    for i in range(len(stages)):
-        key = stages[i] - 1
+    # stage_count의 배열을 순회하면서 stage의 전체 횟수와 실패 횟수 카운트
+    for key in stage_count.keys():
         if key in stage.keys():
-            stage[key].failed += 1
-        else: # OutOfIndexError 처리
-            key -= 1
-        for j in range(key + 1):
-            stage[j].total += 1
+            stage[key].failed += stage_count[key]
+
+        for s in stage:
+            s = stage[s]
+            if s.num <= key: s.total += stage_count[key]
+            else: continue
 
     stage = list(stage.values())
     stage.sort(key=lambda x: x.getFailedRate(), reverse=True)
