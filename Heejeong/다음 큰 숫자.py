@@ -1,15 +1,12 @@
 # 이진수(bin_num) 문자열을 입력받아 1의 개수를 반환하는 함수
 def countOne(bin_num):
-    return len(list(filter(lambda x: x == '1', bin_num)))
-
-def decimalToBinary(n):
-    return str(bin(n))[2:]
+    return str(bin(bin_num))[2:].count('1')
 
 def solution(n):
-    condition = countOne(decimalToBinary(n))
+    condition = countOne(n)
     while True:
         n += 1
-        if countOne(decimalToBinary(n)) == condition: break
+        if countOne(n) == condition: break
     return n
 
 if __name__ == "__main__":
