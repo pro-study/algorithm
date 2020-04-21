@@ -5,6 +5,7 @@ from collections import Counter
 def make_arr(x):
     return [x[i:i + 2].lower() for i in range(len(x) - 1) if x[i:i + 2].isalpha()]
 
+# 자카드 유사도 구하는 함수
 def jacard(arr1, arr2):
     if not arr1 and not arr2: return 1
     c1, c2 = dict(Counter(arr1)), dict(Counter(arr2))
@@ -27,13 +28,10 @@ def jacard(arr1, arr2):
         elif e in c2:
             max_value = c2[e]
         new_union.extend([e for i in range(max_value)])
-    print(new_inter)
-    print(new_union)
+    return len(new_inter)/len(new_union)
 
 
 def solution(str1, str2):
     answer = 0
     arr1, arr2 = make_arr(str1), make_arr(str2)
-    jacard(arr1, arr2)
-
-    return answer
+    return int(jacard(arr1, arr2) * 65536)
